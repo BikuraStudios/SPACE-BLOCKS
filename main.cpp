@@ -4,7 +4,8 @@
 #include <random>
 #include <cstdlib>
 
-
+//------------------------------STRUCTURES----------------------------------------------------------------------
+//______________________________________________________________________________________________________________
 
 struct Coordinates
 {
@@ -22,17 +23,22 @@ struct Blocks
     }
 };
 
+//------------------------------INITIAL VARIABLES---------------------------------------------------------------
+//______________________________________________________________________________________________________________
+
+
 std::vector<Blocks> blocks;
 
 std::vector<Coordinates> coordList;
 
-std::string blockType[] = { "Glass","Cracked","Static","Relic","Eye" };
+//std::string blockType[] = { "Glass","Cracked","Static","Relic","Eye" };
+std::string blockType[] = { "Glass","Glass","Glass","Glass","Glass" };
 std::string blockColor[] = { "red","orange","yellow","green","blue","indigo","violet" };
-
-
-
 int level{ 0 };
-
+sf::Clock gameclock;
+const float paddleSpeed = 300.f;
+//------------------------------FUNCTIONS----------------------------------------------------------------------
+//_____________________________________________________________________________________________________________
 bool isCuendillar()
 {
     //std::cout << "Cuendiar Check!";
@@ -64,8 +70,6 @@ sf::Sprite blockGenerator()
     }
 }
 
-
-
 void drawBlocks(sf::RenderWindow& window, const std::vector<Blocks>& blocks)
 {
     for (const Blocks& block : blocks) {
@@ -74,13 +78,38 @@ void drawBlocks(sf::RenderWindow& window, const std::vector<Blocks>& blocks)
 }
 
 int main()
+
 {
+  
+    //--------------------------------------BALL AND PADDLE TRANSFORM LOGIC--------------------------------------
+  //___________________________________________________________________________________________________________
+    sf::Sprite ball = ballDefault;
+    sf::Sprite paddle = paddleLarge;
+    sf::FloatRect paddleBounds = paddle.getGlobalBounds();
+    sf::FloatRect ballBounds = ball.getGlobalBounds();
+    //-------------------------------------------------------------------------------------------------------------
+      //------------------------------INITIAL SPRITE LOCATIONS-------------------------------------------------------
+    sf::Vector2f ballVelocity(50.f, -50.f);
+
+
+//_____________________________________________________________________________________________________________
+
+    Space_background.setPosition(sf::Vector2f{ 0, 0 });
+    paddle.setPosition(sf::Vector2f{ 860,1005 });
+    ball.setPosition(sf::Vector2f{ 947,980 });
+   // ------------------------------------------------------------------------------------------------------------------
+
+
+
+
     auto window = sf::RenderWindow(sf::VideoMode({ 1920u, 1080u }), "NEW PROJECT");
     window.setFramerateLimit(144);
     window.setPosition({ -8,0 });
     sf::View gameView(sf::FloatRect({ 0.0f, 0.0f }, { 1920.f, 1080.f }));
 
     srand(time(0));
+
+    float deltaTime = gameclock.restart().asSeconds();
 
     for (int y = 45; y <= 525; y += 30) {
         for (int x = 25; x <= 1810; x += 85) {
@@ -134,15 +163,58 @@ int main()
                 gameView.setViewport(viewport);
             }
         }
+        
+  //------------------------------INITIAL MOVEMENT LOGIC-------------------------------------------------------
+  //___________________________________________________________________________________________________________  
+        
+  
+        
+  // ----------------------------PADDLES-------------------------------
+        if (1)
+        {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+            {
+                paddle.move({-paddleSpeed * deltaTime , 0.f});
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+            {
+                paddle.move({paddleSpeed * deltaTime, 0.f });
+            }
+        }
+        //-----------------------------BALL-----------------------------------
+        ball.move(ballVelocity * deltaTime);
+        sf::FloatRect ballBounds = ball.getGlobalBounds();
 
-        Space_background.setPosition(sf::Vector2f{ 0, 0 });
-        paddleLarge.setPosition(sf::Vector2f{ 860,1005 });
+        //------------X--Axis----------------
+        if (ballBounds.position.x < 0.f) {
+            ballVelocity.x *= -1;
+        }
+        if (ballBounds.position.x + ballBounds.size.x > window.getSize().x) {
+            ballVelocity.x *= -1;
+        }
+
+        //------------Y--Axis----------------
+        if (ballBounds.position.y < 0.f) {
+            ballVelocity.y *= -1;
+        }
+        if (ballBounds.position.y + ballBounds.size.y > window.getSize().y) {
+            ballVelocity.y *= -1;
+        }
+        
+       //------------------------------INITIAL COLLISION AND CLAMP----------------------------------------------------
+       //_____________________________________________________________________________________________________________ 
+       // ------------------------------------BALL----------------------------------------------------------------------
+
+       //    
+        
         
         window.setView(gameView);
         window.clear();
         window.draw(Space_background);
+        window.draw(paddle);
+        window.draw(ball);
         drawBlocks(window, blocks);
-        window.draw(paddleLarge);
+        
         
         window.display();
     }

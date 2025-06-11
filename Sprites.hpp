@@ -119,12 +119,14 @@ inline sf::Sprite paddleHuge(texture_atlas, hugePaddleRect);
 inline sf::Sprite paddleLarge(texture_atlas, largePaddleRect);
 inline sf::Sprite paddleMid(texture_atlas, midPaddleRect);
 inline sf::Sprite paddleSmall(texture_atlas, smallPaddleRect);
+inline sf::Sprite paddle(paddleLarge);
 
 inline sf::Sprite ballDefault(texture_atlas, defaultBallRect);
 inline sf::Sprite ballBlue(texture_atlas, blueBallRect);
 inline sf::Sprite ballRed(texture_atlas, redBallRect);
 inline sf::Sprite ballGreen(texture_atlas, greenBallRect);
 inline sf::Sprite ballYellow(texture_atlas, yellowBallRect);
+inline sf::Sprite ball(ballDefault);
 
 inline sf::Sprite heart(texture_atlas, heartRect);
 inline sf::Sprite ship(texture_atlas, shipRect);
