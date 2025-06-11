@@ -12,6 +12,18 @@ struct Coordinates
     int y;
 };
 
+struct Blocks
+{
+    sf::Sprite sprite;
+    Coordinates coord;
+
+    Blocks(const sf::Sprite& s, Coordinates c)
+        : sprite(s), coord(c) {
+    }
+};
+
+std::vector<Blocks> blocks;
+
 std::vector<Coordinates> coordList;
 
 std::string blockType[] = { "Glass","Cracked","Static","Relic","Eye" };
@@ -51,11 +63,10 @@ sf::Sprite blockGenerator()
 
 
 
-void drawBlock(sf::RenderWindow& window, sf::Sprite & sprite, const std::vector<Coordinates>& coords)
+void drawBlocks(sf::RenderWindow& window, const std::vector<Blocks>& blocks)
 {
-    for (const Coordinates& i : coords) {
-        redGlass.setPosition(sf::Vector2f(static_cast<float>(i.x), static_cast<float>(i.y)));
-        window.draw(sprite);
+    for (const Blocks& block : blocks) {
+        window.draw(block.sprite);
     }
 }
 
@@ -70,10 +81,13 @@ int main()
 
     for (int y = 45; y <= 525; y += 30) {
         for (int x = 25; x <= 1810; x += 85) {
-            coordList.push_back({ x, y });
+            Coordinates coord = { x, y };
+            sf::Sprite sprite = blockGenerator();
+            sprite.setPosition(sf::Vector2f(static_cast<float>(x), static_cast<float>(y)));
+            blocks.emplace_back(std::move(sprite), coord);
         }
     }
-    drawBlock(window, blockGenerator(), coordList);
+
 
 
     while (window.isOpen())
@@ -124,7 +138,7 @@ int main()
         window.setView(gameView);
         window.clear();
         window.draw(Space_background);
-        
+        drawBlocks(window, blocks);
         
         window.display();
     }
