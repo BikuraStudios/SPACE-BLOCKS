@@ -29,33 +29,36 @@ std::vector<Coordinates> coordList;
 std::string blockType[] = { "Glass","Cracked","Static","Relic","Eye" };
 std::string blockColor[] = { "red","orange","yellow","green","blue","indigo","violet" };
 
+
+
 int level{ 0 };
 
 bool isCuendillar()
 {
-    if (level < 10)
-    {
-        int cuendillarChance = rand() % 101;
-        if (cuendillarChance < (level / 10))
+    //std::cout << "Cuendiar Check!";
+    int cuendillarChance{ rand() % 101 };
+    std::cout << cuendillarChance <<"\n";
+   if (cuendillarChance < (level / 10))
             return true;
-    }
-    else
+   else
             return false;
 }
 
 sf::Sprite blockGenerator()
 {
     bool CuenCheck = isCuendillar();
+    //std::cout << CuenCheck;
     if (CuenCheck)
         return cuendillar;
     if (!CuenCheck)
+
     {
         
         std::string blckcolor;
         std::string blcktype;
         std::string spriteGetter;
-        blckcolor = blockColor[rand() % 6];
-        blcktype = blockType[rand() % 4];
+        blckcolor = blockColor[rand() % 7];
+        blcktype = blockType[rand() % 5];
         spriteGetter = blckcolor + blcktype;
         return getSpriteByName(spriteGetter);
     }
@@ -133,12 +136,13 @@ int main()
         }
 
         Space_background.setPosition(sf::Vector2f{ 0, 0 });
-
+        paddleLarge.setPosition(sf::Vector2f{ 860,1005 });
         
         window.setView(gameView);
         window.clear();
         window.draw(Space_background);
         drawBlocks(window, blocks);
+        window.draw(paddleLarge);
         
         window.display();
     }
