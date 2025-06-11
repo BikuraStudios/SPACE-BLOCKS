@@ -1,6 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Sprites.hpp"
+#include <random>
+#include <cstdlib>
+
+
 
 struct Coordinates
 {
@@ -8,13 +12,50 @@ struct Coordinates
     int y;
 };
 
-std::array<Coordinates, 9> coordList = { { {25,45}, {110,45}, {195,45}, {25,75}, {110,75}, {195,75}, {25,105}, {110,105}, {195,105} } };
+std::vector<Coordinates> coordList;
+
+std::string blockType[] = { "Glass","Cracked","Static","Relic","Eye" };
+std::string blockColor[] = { "red","orange","yellow","green","blue","indigo","violet" };
+
+int level{ 0 };
+
+bool isCuendillar()
+{
+    if (level < 10)
+    {
+        int cuendillarChance = rand() % 101;
+        if (cuendillarChance < (level / 10))
+            return true;
+    }
+    else
+            return false;
+}
+
+sf::Sprite blockGenerator()
+{
+    bool CuenCheck = isCuendillar();
+    if (CuenCheck)
+        return cuendillar;
+    if (!CuenCheck)
+    {
+        
+        std::string blckcolor;
+        std::string blcktype;
+        std::string spriteGetter;
+        blckcolor = blockColor[rand() % 6];
+        blcktype = blockType[rand() % 4];
+        spriteGetter = blckcolor + blcktype;
+        return getSpriteByName(spriteGetter);
+    }
+}
 
 
-void drawBlock(sf::RenderWindow& window, sf::Sprite& redGlass) {
-    for (const Coordinates& i : coordList) {
-        redGlass.setPosition(sf::Vector2f( static_cast<float>(i.x) ,  static_cast<float>(i.y)) );
-        window.draw(redGlass);
+
+void drawBlock(sf::RenderWindow& window, sf::Sprite & sprite, const std::vector<Coordinates>& coords)
+{
+    for (const Coordinates& i : coords) {
+        redGlass.setPosition(sf::Vector2f(static_cast<float>(i.x), static_cast<float>(i.y)));
+        window.draw(sprite);
     }
 }
 
@@ -25,9 +66,14 @@ int main()
     window.setPosition({ -8,0 });
     sf::View gameView(sf::FloatRect({ 0.0f, 0.0f }, { 1920.f, 1080.f }));
 
+    srand(time(0));
 
-    
-
+    for (int y = 45; y <= 525; y += 30) {
+        for (int x = 25; x <= 1810; x += 85) {
+            coordList.push_back({ x, y });
+        }
+    }
+    drawBlock(window, blockGenerator(), coordList);
 
 
     while (window.isOpen())
@@ -65,6 +111,9 @@ int main()
                     viewport = sf::FloatRect({ 0.f, ((1.f - height) / 2.f) }, { 1.f, height });
                 }
 
+                
+
+
                 gameView.setViewport(viewport);
             }
         }
@@ -75,7 +124,7 @@ int main()
         window.setView(gameView);
         window.clear();
         window.draw(Space_background);
-        drawBlock(window, redGlass);
+        
         
         window.display();
     }

@@ -131,3 +131,78 @@ inline sf::Sprite ship(texture_atlas, shipRect);
 inline sf::Sprite blast(texture_atlas, blastRect);
 
 inline sf::Sprite Space_background(texture_Space);
+
+//--------------------------------------------------------------------------------
+
+inline sf::Sprite& getSpriteByName(const std::string& name) {
+    static const std::unordered_map<std::string, sf::Sprite*> spriteMap = {
+        {"redGlass", &redGlass},
+        {"redCracked", &redCracked},
+        {"redStatic", &redStatic},
+        {"redRelic", &redRelic},
+        {"redEye", &redEye},
+
+        {"orangeGlass", &orangeGlass},
+        {"orangeCracked", &orangeCracked},
+        {"orangeStatic", &orangeStatic},
+        {"orangeRelic", &orangeRelic},
+        {"orangeEye", &orangeEye},
+
+        {"yellowGlass", &yellowGlass},
+        {"yellowCracked", &yellowCracked},
+        {"yellowStatic", &yellowStatic},
+        {"yellowRelic", &yellowRelic},
+        {"yellowEye", &yellowEye},
+
+        {"greenGlass", &greenGlass},
+        {"greenCracked", &greenCracked},
+        {"greenStatic", &greenStatic},
+        {"greenRelic", &greenRelic},
+        {"greenEye", &greenEye},
+
+        {"blueGlass", &blueGlass},
+        {"blueCracked", &blueCracked},
+        {"blueStatic", &blueStatic},
+        {"blueRelic", &blueRelic},
+        {"blueEye", &blueEye},
+
+        {"indigoGlass", &indigoGlass},
+        {"indigoCracked", &indigoCracked},
+        {"indigoStatic", &indigoStatic},
+        {"indigoRelic", &indigoRelic},
+        {"indigoEye", &indigoEye},
+
+        {"violetGlass", &violetGlass},
+        {"violetCracked", &violetCracked},
+        {"violetStatic", &violetStatic},
+        {"violetRelic", &violetRelic},
+        {"violetEye", &violetEye},
+
+        {"cuendillar", &cuendillar},
+
+        {"paddleHuge", &paddleHuge},
+        {"paddleLarge", &paddleLarge},
+        {"paddleMid", &paddleMid},
+        {"paddleSmall", &paddleSmall},
+
+        {"ballDefault", &ballDefault},
+        {"ballBlue", &ballBlue},
+        {"ballRed", &ballRed},
+        {"ballGreen", &ballGreen},
+        {"ballYellow", &ballYellow},
+
+        {"heart", &heart},
+        {"ship", &ship},
+        {"blast", &blast},
+
+        {"Space_background", &Space_background}
+    };
+
+    auto it = spriteMap.find(name);
+    if (it != spriteMap.end()) {
+        return *(it->second);
+    }
+    else {
+        throw std::runtime_error("Sprite not found: " + name);
+    }
+}
