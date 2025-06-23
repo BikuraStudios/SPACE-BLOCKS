@@ -1,8 +1,33 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
 
 sf::Texture texture_atlas("atlas.png");
 sf::Texture texture_Space("Space.png");
+sf::Texture texture_TitleUNCLR("TitleUNCLR.png");
+sf::Texture texture_TitleCLR("TitleCLR.png");
+sf::Texture texture_logo("logo.png");
+
+sf::Font font("PressStart2P.ttf");
+
+sf::Text startText(font);
+sf::Text score(font);
+sf::Text lvl(font);
+sf::Text lives(font);
+sf::Text gmovr(font);
+sf::Text nxtlvl(font);
+sf::Text pressR(font);
+
+
+
+sf::Text remaining(font);
+
+inline sf::Sprite colorTitle{ texture_TitleCLR };
+inline sf::Sprite unColorTitle{ texture_TitleUNCLR };
+inline sf::Sprite logo{ texture_logo };
+
+
 
 
 // BLOCKS (85 x 30)
@@ -129,6 +154,9 @@ inline sf::Sprite ballYellow(texture_atlas, yellowBallRect);
 inline sf::Sprite ball(ballDefault);
 
 inline sf::Sprite heart(texture_atlas, heartRect);
+inline sf::Sprite heart2(texture_atlas, heartRect);
+inline sf::Sprite heart3(texture_atlas, heartRect);
+
 inline sf::Sprite ship(texture_atlas, shipRect);
 inline sf::Sprite blast(texture_atlas, blastRect);
 
@@ -208,3 +236,4 @@ inline sf::Sprite& getSpriteByName(const std::string& name) {
         throw std::runtime_error("Sprite not found: " + name);
     }
 }
+
